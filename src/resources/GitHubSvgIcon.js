@@ -1,5 +1,10 @@
 import React from 'react';
+import { withStyles } from 'material-ui/styles';
 import SvgIcon from 'material-ui/SvgIcon';
+
+const styles = theme => ({
+    
+});
 
 class GitHubSvgIcon extends React.Component {
     render() {
@@ -11,4 +16,4 @@ class GitHubSvgIcon extends React.Component {
     }
 }
 
-export default GitHubSvgIcon;
+export default withStyles(styles)(GitHubSvgIcon);

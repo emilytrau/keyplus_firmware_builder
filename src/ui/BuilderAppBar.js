@@ -11,7 +11,8 @@ import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import FileUploadIcon from 'material-ui-icons/FileUpload';
 import ContentPasteIcon from 'material-ui-icons/ContentPaste';
-import GitHubSvgIcon from './GitHubSvgIcon.js';
+import GitHubSvgIcon from './../resources/GitHubSvgIcon.js';
+import KeyplusSvgIcon from './../resources/KeyplusSvgIcon.js';
 
 const styles = theme => ({
     root: {
@@ -97,7 +98,7 @@ class BuilderAppBar extends React.Component {
                                     <ListItemText primary='Contribute on GitHub' />
                                 </ListItem>
                                 <ListItem button component='a' href='https://github.com/ahtn/keyplus'>
-                                    <GitHubSvgIcon />
+                                    <KeyplusSvgIcon />
                                     <ListItemText primary='keyplus Firmware' />
                                 </ListItem>
                             </List>

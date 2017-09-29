@@ -9,12 +9,12 @@ import ContentPasteIcon from 'material-ui-icons/ContentPaste';
 import GitHubSvgIcon from './../resources/GitHubSvgIcon.js';
 import KeyplusSvgIcon from './../resources/KeyplusSvgIcon.js';
 
-const styles = {
+const styles = theme => ({
     drawerList: {
         width: 250,
         flex: 'initial'
     }
-}
+});
 
 class BuilderDrawer extends React.Component {
     render() {
@@ -41,11 +41,15 @@ class BuilderDrawer extends React.Component {
                         <Divider />
                         <List>
                             <ListItem button component='a' href='https://github.com/angustrau/keyplus_firmware_builder'>
-                                <GitHubSvgIcon />
+                                <ListItemIcon>
+                                    <GitHubSvgIcon />
+                                </ListItemIcon>
                                 <ListItemText primary='Contribute on GitHub' />
                             </ListItem>
                             <ListItem button component='a' href='https://github.com/ahtn/keyplus'>
-                                <KeyplusSvgIcon />
+                                <ListItemIcon>
+                                    <KeyplusSvgIcon />
+                                </ListItemIcon>
                                 <ListItemText primary='keyplus Firmware' />
                             </ListItem>
                         </List>

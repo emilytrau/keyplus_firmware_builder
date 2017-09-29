@@ -1,4 +1,4 @@
-import Keyboard from './Keyboard.js';
+import KBCollection from './KBCollection.js';
 
 // Loads a config from a local file and returns a Promise<Keyboard> instance
 function ConfigLoader() {
@@ -40,7 +40,7 @@ function ConfigLoader() {
                 // Parse resulting file as json
                 try {
                     let rawjson = JSON.parse(reader.result);
-                    resolve(new Keyboard(rawjson));
+                    resolve(new KBCollection(rawjson));
                 } catch(err) {
                     reject(`Invalid config: ${err.message}`);
                 } 

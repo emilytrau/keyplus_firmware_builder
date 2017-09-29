@@ -1,24 +1,24 @@
 // Data structure which represents a key
 class Key {
-    constructor(config) {
-        if (!(config.x && config.y && config.width && config.height && config.x2 && config.y2 && config.w2 && config.h2 && config.row && config.column)) {
-            throw new Error('Invalid key config');
+    constructor(data) {
+        if (!(data.x && data.y && data.width && data.height && data.x2 && data.y2 && data.w2 && data.h2 && data.row && data.column)) {
+            throw new Error('Invalid key data');
         }
 
         // Position data
-        this.x = config.x;
-        this.y = config.y;
-        this.width = config.width;
-        this.height = config.height;
+        this.x = data.x;
+        this.y = data.y;
+        this.width = data.width;
+        this.height = data.height;
         // Position data of second rectangle (eg. for ISO enter)
-        this.x2 = config.x2;
-        this.y2 = config.y2;
-        this.w2 = config.w2;
-        this.h2 = config.h2;
+        this.x2 = data.x2;
+        this.y2 = data.y2;
+        this.w2 = data.w2;
+        this.h2 = data.h2;
 
         // Matrix data
-        this.row = config.row;
-        this.column = config.column;
+        this.row = data.row;
+        this.column = data.column;
     }
 }
 

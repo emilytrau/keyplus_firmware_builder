@@ -14,6 +14,7 @@ class BuilderKLEPasteDialog extends React.Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleOk = this.handleOk.bind(this);
+        this.handleEntering = this.handleEntering.bind(this);
     }
 
     handleChange(e) {
@@ -24,11 +25,16 @@ class BuilderKLEPasteDialog extends React.Component {
         this.props.onChange(this.state.value);
     }
 
+    handleEntering() {
+        this.textbox.focus();
+    }
+
     render() {
         return (
             <Dialog
                 open={ this.props.open }
                 onRequestClose={ this.props.onRequestClose }
+                onEntering={ this.handleEntering }
             >
                 <DialogTitle>Paste KLE Raw Data</DialogTitle>
                 <DialogContent>
@@ -36,7 +42,8 @@ class BuilderKLEPasteDialog extends React.Component {
                         placeholder='Layout' 
                         value={ this.state.value } 
                         onChange={ this.handleChange } 
-                        fullWidth 
+                        fullWidth
+                        inputRef={ (input) => { this.textbox = input } }
                     />
                 </DialogContent>
                 <DialogActions>

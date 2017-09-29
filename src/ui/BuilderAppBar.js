@@ -13,6 +13,7 @@ import FileUploadIcon from 'material-ui-icons/FileUpload';
 import ContentPasteIcon from 'material-ui-icons/ContentPaste';
 import GitHubSvgIcon from './../resources/GitHubSvgIcon.js';
 import KeyplusSvgIcon from './../resources/KeyplusSvgIcon.js';
+import ConfigLoader from './../functions/ConfigLoader.js';
 
 const styles = theme => ({
     root: {
@@ -51,7 +52,13 @@ class BuilderAppBar extends React.Component {
 
     // Load existing config
     useConfig() {
-
+        ConfigLoader()
+        .then((c) => {
+            console.log(c);
+        })
+        .catch((e) => {
+            console.log(e);
+        });
     }
 
     // Load new config from KLE layout

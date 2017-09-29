@@ -1,5 +1,5 @@
 // Data structure which represents a key
-export default class Key {
+class Key {
     constructor(config) {
         if (!(config.x && config.y && config.width && config.height && config.x2 && config.y2 && config.w2 && config.h2 && config.row && config.column)) {
             throw new Error('Invalid key config');
@@ -21,3 +21,5 @@ export default class Key {
         this.column = config.column;
     }
 }
+
+export default Key;

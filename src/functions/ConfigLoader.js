@@ -1,7 +1,7 @@
 import Keyboard from './Keyboard.js';
 
-// Loads a config from a local file and returns a Keyboard instance
-export default function ConfigLoader() {
+// Loads a config from a local file and returns a Promise<Keyboard> instance
+function ConfigLoader() {
     return new Promise((resolve, reject) => {
         // Check if File API is available
         if (!(window.File && window.FileReader && window.FileList)) {
@@ -53,3 +53,5 @@ export default function ConfigLoader() {
         fileInput.click();
     });
 }
+
+export default ConfigLoader;

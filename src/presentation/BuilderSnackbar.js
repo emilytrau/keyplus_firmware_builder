@@ -4,7 +4,7 @@ import Snackbar from 'material-ui/Snackbar';
 import IconButton from 'material-ui/IconButton';
 import CloseIcon from 'material-ui-icons/Close';
 
-class BuilderLoadKBErrorSnackbar extends React.Component {
+class BuilderSnackbar extends React.Component {
     render() {
         return (
             <Snackbar
@@ -31,10 +31,11 @@ class BuilderLoadKBErrorSnackbar extends React.Component {
     }
 }
 
-BuilderLoadKBErrorSnackbar.propTypes = {
-    message: PropTypes.string,
-    onRequestClose: PropTypes.func,
-    open: PropTypes.bool
+BuilderSnackbar.propTypes = {
+    // External props
+    message: PropTypes.string.isRequired,
+    onRequestClose: PropTypes.func.isRequired,
+    open: PropTypes.bool.isRequired
 }
 
-export default BuilderLoadKBErrorSnackbar;
+export default BuilderSnackbar;

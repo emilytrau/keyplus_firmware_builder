@@ -8,8 +8,8 @@ class KBCollection {
         if (data.majorVersion !== config.SchemaMajorVersion) {
             throw new Error('Configuration is incompatible with this version of the builder');
         }
-        if (!(data.minorVersion && data.keyboards)) {
-            throw new Error('Invalid key data');
+        if ((data.minorVersion && data.keyboards) === undefined) {
+            throw new Error('Invalid collection data');
         }
 
         this.majorVersion = data.majorVersion;

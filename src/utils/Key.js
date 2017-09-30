@@ -1,7 +1,8 @@
 // Data structure which represents a key
 class Key {
     constructor(data) {
-        if (!(data.x && data.y && data.width && data.height && data.x2 && data.y2 && data.w2 && data.h2 && data.row && data.column)) {
+        if (undefined === (data.x && data.y && data.width && data.height && data.x2 && data.y2 && data.w2 && data.h2 && data.row && data.column)) {
+            console.log(data);
             throw new Error('Invalid key data');
         }
 

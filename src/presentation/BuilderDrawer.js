@@ -62,7 +62,8 @@ class BuilderDrawer extends React.Component {
 
 BuilderDrawer.propTypes = {
     classes: PropTypes.object.isRequired,
-    onRequestClose: PropTypes.func,
+    // External props
+    onRequestClose: PropTypes.func.isRequired,
     onUseClipboardKLE: PropTypes.func.isRequired,
     onUseConfigUpload: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired

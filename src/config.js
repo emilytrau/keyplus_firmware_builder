@@ -1,4 +1,4 @@
 export default {
     SchemaMajorVersion: 1,
-    SchemaMinorVersion: 0
+    SchemaMinorVersion: 1
 }

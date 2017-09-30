@@ -5,49 +5,27 @@ import Button from 'material-ui/Button';
 import Input from 'material-ui/Input';
 
 class BuilderKLEPasteDialog extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            value: ''
-        }
-
-        this.handleChange = this.handleChange.bind(this);
-        this.handleOk = this.handleOk.bind(this);
-        this.handleEntering = this.handleEntering.bind(this);
-    }
-
-    handleChange(e) {
-        this.setState({ value: e.target.value });
-    }
-
-    handleOk() {
-        this.props.onChange(this.state.value);
-    }
-
-    handleEntering() {
-        this.textbox.focus();
-    }
-
     render() {
         return (
             <Dialog
                 open={ this.props.open }
                 onRequestClose={ this.props.onRequestClose }
-                onEntering={ this.handleEntering }
+                onEntering={ () => this.textbox.focus() }
             >
                 <DialogTitle>Paste KLE Raw Data</DialogTitle>
                 <DialogContent>
                     <Input
                         placeholder='Layout' 
-                        value={ this.state.value } 
-                        onChange={ this.handleChange } 
                         fullWidth
                         inputRef={ (input) => { this.textbox = input } }
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button color='primary' onClick={ this.handleOk }>Ok</Button>
+                    <Button color='primary' onClick={ this.props.onRequestClose }>Cancel</Button>
+                    <Button color='primary' onClick={ () => {
+                        this.props.onChange(this.textbox.value);
+                        this.textbox.value = ''
+                    } }>Ok</Button>
                 </DialogActions>
             </Dialog>
         );
@@ -55,9 +33,10 @@ class BuilderKLEPasteDialog extends React.Component {
 }
 
 BuilderKLEPasteDialog.propTypes = {
-    onChange: PropTypes.func,
-    onRequestClose: PropTypes.func,
-    open: PropTypes.bool
+    // External props
+    onChange: PropTypes.func.isRequired,
+    onRequestClose: PropTypes.func.isRequired,
+    open: PropTypes.bool.isRequired
 }
 
-export default BuilderKLEPasteDialog;
+export default BuilderKLEPasteDialog

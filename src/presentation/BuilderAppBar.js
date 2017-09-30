@@ -38,7 +38,8 @@ class BuilderAppBar extends React.Component {
 
 BuilderAppBar.propTypes = {
     classes: PropTypes.object.isRequired,
-    onRequestDrawerOpen: PropTypes.func
+    // External props
+    onRequestDrawerOpen: PropTypes.func.isRequired
 }
 
 export default withStyles(styles)(BuilderAppBar);

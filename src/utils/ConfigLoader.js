@@ -1,4 +1,5 @@
 import KBCollection from './KBCollection.js';
+import JSON5 from 'json5';
 
 // Loads a config from a local file and returns a Promise<Keyboard> instance
 function ConfigLoader() {
@@ -19,7 +20,7 @@ function ConfigLoader() {
         fileInput.style.display = 'none';
         fileInput.setAttribute('id', 'configloader-file-picker');
         fileInput.setAttribute('type', 'file');
-        fileInput.setAttribute('accept', '.kbconfig, .json');
+        fileInput.setAttribute('accept', '.kbconfig, .json5');
         document.body.appendChild(fileInput);
 
         const timeout = setTimeout(() => {
@@ -39,7 +40,7 @@ function ConfigLoader() {
             reader.onload = () => {
                 // Parse resulting file as json
                 try {
-                    let rawjson = JSON.parse(reader.result);
+                    let rawjson = JSON5.parse(reader.result);
                     resolve(new KBCollection(rawjson));
                 } catch(err) {
                     reject(`Invalid config: ${err.message}`);

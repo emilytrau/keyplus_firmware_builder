@@ -114,7 +114,7 @@ App.propTypes = {
     onRequestKLEPasteDialogOpen: PropTypes.func.isRequired,
     onSetKBCollection: PropTypes.func.isRequired,
     onShowSnackbarMessage: PropTypes.func.isRequired,
-    kbcollection: PropTypes.object.isRequired,
+    kbcollection: PropTypes.object,
     isDrawerOpen: PropTypes.bool.isRequired,
     isKLEPasteDialogOpen: PropTypes.bool.isRequired,
     snackbarMessage: PropTypes.string.isRequired

@@ -93,6 +93,7 @@ class BuilderMain extends React.Component {
                 onKBSettingsClick={ () => onRequestSetTab('kbsettings') }
                 onAddKeyboardClick={ onRequestOpenKLEPasteDialog }
                 onSaveConfigClick={ this.handleSaveConfig }
+                onCompileClick={ () => onRequestSetTab('compile') }
                 onCollectionSettingsClick={ () => onRequestSetTab('collectionsettings') }
                 selectedKeyboard={ selectedKeyboard }
                 selectedTab={ selectedTab }
@@ -172,7 +173,7 @@ BuilderMain.propTypes = {
     onRequestShowSnackbar: PropTypes.func.isRequired,
     onRequestOpenKLEPasteDialog: PropTypes.func.isRequired,
     onRequestCloseKLEPasteDialog: PropTypes.func.isRequired,
-    onAddKeyboard: (keyboard) => PropTypes.func.isRequired,
+    onAddKeyboard: PropTypes.func.isRequired,
     kbcollection: PropTypes.object.isRequired,
     selectedKeyboard: PropTypes.number.isRequired,
     selectedTab: PropTypes.string.isRequired,

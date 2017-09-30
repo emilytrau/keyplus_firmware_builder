@@ -12,6 +12,7 @@ import SettingsIcon from 'material-ui-icons/Settings';
 import AddIcon from 'material-ui-icons/Add';
 import SaveIcon from 'material-ui-icons/Save'
 import ArchiveIcon from 'material-ui-icons/Archive';
+import ListItemSelectable from './ListItemSelectable.js';
 
 const styles = theme => ({
     root: {
@@ -20,9 +21,6 @@ const styles = theme => ({
     },
     nested: {
         paddingLeft: theme.spacing.unit * 4
-    },
-    selected: {
-        color: theme.palette.primary[500]
     }
 });
 
@@ -51,45 +49,27 @@ class BuilderSidebarList extends React.Component {
                                         unmountOnExit
                                         key={ index * 2 + 1 }
                                     >
-                                        <ListItem
-                                            button
+                                        <ListItemSelectable
                                             onClick={ this.props.onKeymapClick }
+                                            icon={ <KeyboardIcon /> }
+                                            primary='Keymap'
+                                            selected={ this.props.selectedTab === 'keymap' }
                                             className={ classes.nested }
-                                        >
-                                            <ListItemIcon classes={{ root: this.props.selectedTab === 'keymap' ? classes.selected : undefined }}>
-                                                <KeyboardIcon />
-                                            </ListItemIcon>
-                                            <ListItemText 
-                                                primary='Keymap'
-                                                classes={{ text: this.props.selectedTab === 'keymap' ? classes.selected : undefined }}
-                                            />
-                                        </ListItem>
-                                        <ListItem
-                                            button
+                                        />
+                                        <ListItemSelectable
                                             onClick={ this.props.onMatrixClick }
+                                            icon={ <GridOnIcon /> }
+                                            primary='Matrix'
+                                            selected={ this.props.selectedTab === 'matrix' }
                                             className={ classes.nested }
-                                        >
-                                            <ListItemIcon classes={{ root: this.props.selectedTab === 'matrix' ? classes.selected : undefined }}>
-                                                <GridOnIcon />
-                                            </ListItemIcon>
-                                            <ListItemText
-                                                primary='Matrix'
-                                                classes={{ text: this.props.selectedTab === 'matrix' ? classes.selected : undefined }}
-                                            />
-                                        </ListItem>
-                                        <ListItem
-                                            button
+                                        />
+                                        <ListItemSelectable
                                             onClick={ this.props.onKBSettingsClick }
+                                            icon={ <SettingsIcon /> }
+                                            primary='Settings'
+                                            selected={ this.props.selectedTab === 'kbsettings' }
                                             className={ classes.nested }
-                                        >
-                                            <ListItemIcon classes={{ root: this.props.selectedTab === 'kbsettings' ? classes.selected : undefined }}>
-                                                <SettingsIcon />
-                                            </ListItemIcon>
-                                            <ListItemText
-                                                primary='Settings'
-                                                classes={{ text: this.props.selectedTab === 'kbsettings' ? classes.selected : undefined }}
-                                            />
-                                        </ListItem>
+                                        />
                                     </Collapse>
                                 ]
                             );
@@ -104,15 +84,18 @@ class BuilderSidebarList extends React.Component {
                 </List>
                 <Divider />
                 <List>
-                    <ListItem button onClick={ this.props.onCollectionSettingsClick }>
-                        <ListItemIcon classes={{ root: this.props.selectedTab === 'collectionsettings' ? classes.selected : undefined }}>
-                            <SettingsIcon />
-                        </ListItemIcon>
-                        <ListItemText
-                            primary='Collection settings'
-                            classes={{ text: this.props.selectedTab === 'collectionsettings' ? classes.selected : undefined }}
-                        />
-                    </ListItem>
+                    <ListItemSelectable
+                        onClick={ this.props.onCollectionSettingsClick }
+                        icon={ <SettingsIcon /> }
+                        primary='Collection settings'
+                        selected={ this.props.selectedTab === 'collectionsettings' }
+                    />
+                    <ListItemSelectable
+                        onClick={ this.props.onCompileClick }
+                        icon={ <ArchiveIcon /> }
+                        primary='Compile'
+                        selected={ this.props.selectedTab === 'compile' }
+                    />
                 </List>
                 <Divider />
                 <List>
@@ -121,12 +104,6 @@ class BuilderSidebarList extends React.Component {
                             <SaveIcon />
                         </ListItemIcon>
                         <ListItemText primary='Save config' />
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon>
-                            <ArchiveIcon />
-                        </ListItemIcon>
-                        <ListItemText primary='Compile' />
                     </ListItem>
                 </List>
             </div>
@@ -143,6 +120,7 @@ BuilderSidebarList.propTypes = {
     onKBSettingsClick: PropTypes.func.isRequired,
     onAddKeyboardClick: PropTypes.func.isRequired,
     onSaveConfigClick: PropTypes.func.isRequired,
+    onCompileClick: PropTypes.func.isRequired,
     onCollectionSettingsClick: PropTypes.func.isRequired,
     selectedKeyboard: PropTypes.number.isRequired,
     selectedTab: PropTypes.string.isRequired,

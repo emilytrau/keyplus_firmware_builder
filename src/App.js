@@ -1,22 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
-import { lightBlue } from 'material-ui/colors';
-import BuilderAppBar from './ui/BuilderAppBar.js';
-import BuilderDrawer from './ui/BuilderDrawer.js';
-import BuilderMain from './ui/BuilderMain.js';
-import BuilderKLEPasteDialog from './ui/BuilderKLEPasteDialog.js';
-import BuilderLoadKBErrorSnackbar from './ui/BuilderLoadKBErrorSnackbar';
-import ConfigLoader from './functions/ConfigLoader.js';
-import KLELoader from './functions/KLELoader.js';
-
-import 'typeface-roboto';
-
-const theme = createMuiTheme({
-    palette: {
-        primary: lightBlue
-    }
-});
+import { connect } from 'react-redux';
+import { openDrawer, closeDrawer, openKLEPasteDialog, closeKLEPasteDialog, setKBCollection, showSnackbar } from './actions/App.js';
+import { withStyles } from 'material-ui/styles';
+import BuilderAppBar from './presentation/BuilderAppBar.js';
+import BuilderDrawer from './presentation/BuilderDrawer.js';
+import BuilderMain from './container/BuilderMain.js';
+import BuilderKLEPasteDialog from './presentation/BuilderKLEPasteDialog.js';
+import BuilderSnackbar from './presentation/BuilderSnackbar.js';
+import ConfigLoader from './utils/ConfigLoader.js';
+import KLELoader from './utils/KLELoader.js';
 
 const styles = theme => ({
     app: {
@@ -27,39 +20,50 @@ const styles = theme => ({
     }
 });
 
+const mapStateToProps = (state, ownProps) => ({
+    kbcollection: state.app.kbcollection,
+    isDrawerOpen: state.app.isDrawerOpen,
+    isKLEPasteDialogOpen: state.app.isKLEPasteDialogOpen,
+    snackbarMessage: state.app.snackbarMessage
+});
+
+const mapDispatchToProps = (dispatch, ownProps) => ({
+    onRequestDrawerOpen: () => {
+        dispatch(openDrawer());
+    },
+    onRequestDrawerClose: () => {
+        dispatch(closeDrawer());
+    },
+    onRequestKLEPasteDialogOpen: () => {
+        dispatch(openKLEPasteDialog());
+    },
+    onRequestKLEPasteDialogClose: () => {
+        dispatch(closeKLEPasteDialog());
+    },
+    onSetKBCollection: (kbcollection) => {
+        dispatch(setKBCollection(kbcollection));
+    },
+    onShowSnackbarMessage: (message) => {
+        dispatch(showSnackbar(message));
+    }
+});
+
 class App extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            isDrawerOpen: false,
-            isKLEPasteDialogOpen: false,
-            keyboard: null,
-            loadKBErrorMessage: ''
-        }
-
-        this.toggleDrawer = this.toggleDrawer.bind(this);
         this.loadKeyboard = this.loadKeyboard.bind(this);
         this.handleUseConfigUpload = this.handleUseConfigUpload.bind(this);
-        this.handleUseClipboardKLE = this.handleUseClipboardKLE.bind(this);
         this.handleLoadKLE = this.handleLoadKLE.bind(this);
-        this.handleLoadKBErrorSnackbarClose = this.handleLoadKBErrorSnackbarClose.bind(this);
-    }
-
-    // Sets the drawer open state to 'state' or toggle if not provided
-    toggleDrawer(state) {
-        this.setState({ isDrawerOpen: state || !this.state.isDrawerOpen });
     }
     
-    loadKeyboard(loader) {
-        loader.then((keyboard) => {
-            this.setState({ 
-                keyboard,
-                isDrawerOpen: false
-            });
+    loadKeyboard(promise) {
+        promise.then((kbcollection) => {
+            this.props.onSetKBCollection(kbcollection);
+            this.props.onRequestDrawerClose();
         })
         .catch((err) => {
-            this.setState({ loadKBErrorMessage: err });
+            this.props.onShowSnackbarMessage(err);
         });
     }
 
@@ -68,56 +72,52 @@ class App extends React.Component {
         this.loadKeyboard(ConfigLoader())
     }
 
-    // Called when "Load KLE from clipboard" is selected in drawer
-    handleUseClipboardKLE() {
-        this.setState({
-            isKLEPasteDialogOpen: true
-        });
-    }
-
     // Called when KLE dialog has returned data
     handleLoadKLE(layout) {
         this.loadKeyboard(KLELoader(layout));
-        this.setState({ isKLEPasteDialogOpen: false });
-    }
-
-    // Called when error snackbar is closed
-    handleLoadKBErrorSnackbarClose() {
-        this.setState({ loadKBErrorMessage: '' });
+        this.props.onRequestKLEPasteDialogClose();
     }
 
     render() {
-        const classes = this.props.classes;
+        const { classes } = this.props;
 
         return (
-            <MuiThemeProvider theme={ theme }>
-                <div className={ classes.app }>
-                    <BuilderAppBar onRequestDrawerOpen={ () => this.toggleDrawer(true) } />
-                    <BuilderDrawer 
-                        open={ !this.state.keyboard || this.state.isDrawerOpen } 
-                        onRequestClose={ () => this.toggleDrawer(false) }
-                        onUseConfigUpload={ this.handleUseConfigUpload }  
-                        onUseClipboardKLE={ this.handleUseClipboardKLE }
-                    />
-                    <BuilderMain />
-                    <BuilderKLEPasteDialog
-                        open={ this.state.isKLEPasteDialogOpen }
-                        onChange={ this.handleLoadKLE }
-                        onRequestClose={ () => this.setState({ isKLEPasteDialogOpen: false }) }
-                    />
-                    <BuilderLoadKBErrorSnackbar
-                        open={ this.state.loadKBErrorMessage !== '' }
-                        message={ this.state.loadKBErrorMessage }
-                        onRequestClose={ this.handleLoadKBErrorSnackbarClose }
-                    />
-                </div>
-            </MuiThemeProvider>
+            <div className={ classes.app }>
+                <BuilderAppBar onRequestDrawerOpen={ this.props.onRequestDrawerOpen } />
+                <BuilderDrawer 
+                    open={ this.props.isDrawerOpen || !this.props.kbcollection }
+                    onUseConfigUpload={ this.handleUseConfigUpload }
+                    onUseClipboardKLE={ this.props.onRequestKLEPasteDialogOpen }
+                    onRequestClose={ this.props.onRequestDrawerClose }
+                />
+                { this.props.kbcollection ? <BuilderMain /> : <div /> }
+                <BuilderKLEPasteDialog
+                    open={ this.props.isKLEPasteDialogOpen }
+                    onChange={ this.handleLoadKLE }
+                    onRequestClose={ this.props.onRequestKLEPasteDialogClose }
+                />
+                <BuilderSnackbar
+                    open={ this.props.snackbarMessage !== '' }
+                    message={ this.props.snackbarMessage }
+                    onRequestClose={ () => this.props.onShowSnackbarMessage('') }
+                />
+            </div>
         );
     }
 }
 
 App.propTypes = {
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    onRequestDrawerClose: PropTypes.func.isRequired,
+    onRequestDrawerOpen: PropTypes.func.isRequired,
+    onRequestKLEPasteDialogClose: PropTypes.func.isRequired,
+    onRequestKLEPasteDialogOpen: PropTypes.func.isRequired,
+    onSetKBCollection: PropTypes.func.isRequired,
+    onShowSnackbarMessage: PropTypes.func.isRequired,
+    kbcollection: PropTypes.object.isRequired,
+    isDrawerOpen: PropTypes.bool.isRequired,
+    isKLEPasteDialogOpen: PropTypes.bool.isRequired,
+    snackbarMessage: PropTypes.string.isRequired
 }
 
-export default withStyles(styles)(App);
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(App));

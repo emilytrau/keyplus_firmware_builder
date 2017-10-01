@@ -38,11 +38,11 @@ function KLELoader(kleData) {
                         x += mod.x || 0;
                         y += mod.y || 0;
                         width = mod.w || width;
-                        height = mod.h || width;
+                        height = mod.h || height;
                         x2 = mod.x2 || x2;
                         y2 = mod.y2 || y2;
-                        w2 = mod.w2 || w2;
-                        h2 = mod.h2 || h2;
+                        w2 = mod.w2 || width;
+                        h2 = mod.h2 || height;
                         decal = mod.d !== undefined ? mod.d : decal;
                         return;
                     }
@@ -62,7 +62,7 @@ function KLELoader(kleData) {
                         });
                     }
 
-                    x++;
+                    x += width;
                     columnCount++;
                     // Reset values that only apply to this key
                     width = 1;

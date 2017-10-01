@@ -13,20 +13,22 @@ const styles = theme => ({
         display: 'flex',
         'align-items': 'center',
         'flex-flow': 'column',
-        width: '100%'
+        width: '100%',
+        padding: theme.spacing.unit,
+        'box-sizing':'border-box'
     },
     keyboardDisplay: {
-        position: 'relative',
-        width: '100%',
         display: 'flex',
         'flex-flow': 'column',
-        'align-items': 'center'
+        'align-items': 'center',
+        position: 'relative',
+        width: '100%'
     },
     scrollContainer: {
-        'overflow-x': 'auto',
         position: 'absolute',
         width: '100%',
-        'max-width': 'fit-content'
+        'max-width': 'fit-content',
+        'overflow-x': 'auto'
     },
     zoomButtons: {
         display: 'flex',

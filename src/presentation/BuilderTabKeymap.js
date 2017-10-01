@@ -5,11 +5,7 @@ import Section from './Section.js';
 import BuilderKeyboard from './../container/BuilderKeyboard.js';
 
 const styles = theme => ({
-    keyboardDisplay: {
-        padding: theme.spacing.unit,
-        display: 'flex',
-        'justify-content': 'center'
-    }
+
 });
 
 class BuilderTabKeymap extends React.Component {
@@ -18,9 +14,7 @@ class BuilderTabKeymap extends React.Component {
 
         return (
             <Section>
-                <div className={ classes.keyboardDisplay }>
-                    <BuilderKeyboard />
-                </div>
+                <BuilderKeyboard />
             </Section>
         );
     }

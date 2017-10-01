@@ -12,6 +12,7 @@ import ChevronRightIcon from 'material-ui-icons/ChevronRight';
 import BuilderSidebarList from './../presentation/BuilderSidebarList.js';
 import BuilderKLEPasteDialog from './../presentation/BuilderKLEPasteDialog';
 import BuilderTabKeymap from './../presentation/BuilderTabKeymap.js';
+import BuilderTabMatrix from './../presentation/BuilderTabMatrix.js';
 import BuilderTabKBSettings from './../presentation/BuilderTabKBSettings.js';
 import BuilderTabCollectionSettings from './../presentation/BuilderTabCollectionSettings.js';
 import KLELoader from './../utils/KLELoader.js';
@@ -119,6 +120,10 @@ class BuilderMain extends React.Component {
         switch(selectedTab) {
             case 'keymap':
                 return <BuilderTabKeymap
+                    keyboard={ selectedKeyboard }
+                />
+            case 'matrix':
+                return <BuilderTabMatrix
                     keyboard={ selectedKeyboard }
                 />
             case 'kbsettings':

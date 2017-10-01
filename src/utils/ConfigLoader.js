@@ -20,7 +20,7 @@ function ConfigLoader() {
         fileInput.style.display = 'none';
         fileInput.setAttribute('id', 'configloader-file-picker');
         fileInput.setAttribute('type', 'file');
-        fileInput.setAttribute('accept', '.kbconfig, .json5');
+        fileInput.setAttribute('accept', '.kbconfig');
         document.body.appendChild(fileInput);
 
         const timeout = setTimeout(() => {

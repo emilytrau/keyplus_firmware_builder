@@ -22,9 +22,9 @@ export function closeKLEPasteDialog() {
     }
 }
 
-export function setKBCollection(kbcollection) {
+export function updateKBCollection(kbcollection) {
     return {
-        type: 'SET_KEYBOARDCOLLECTION',
+        type: 'UPDATE_KEYBOARDCOLLECTION',
         kbcollection
     }
 }
@@ -40,5 +40,13 @@ export function addKeyboard(keyboard) {
     return {
         type: 'ADD_KEYBOARD',
         keyboard
+    }
+}
+
+export function updateKeyboard(oldKeyboard, newKeyboard) {
+    return {
+        type: 'UPDATE_KEYBOARD',
+        oldKeyboard,
+        newKeyboard
     }
 }

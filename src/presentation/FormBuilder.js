@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Tooltip from 'material-ui/Tooltip';
-import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
 import HelpIcon from 'material-ui-icons/Help';
 import { FormGroup, FormControl, FormLabel, FormControlLabel } from 'material-ui/Form';

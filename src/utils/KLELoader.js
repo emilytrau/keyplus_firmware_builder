@@ -87,6 +87,7 @@ function KLELoader(kleData) {
             }
 
             collection = new KBCollection({
+                name: 'Untitled collection',
                 majorVersion: config.SchemaMajorVersion,
                 minorVersion: config.SchemaMinorVersion,
                 keyboards: [

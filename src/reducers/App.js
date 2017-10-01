@@ -25,7 +25,7 @@ function App(state = {
                 ...state,
                 isKLEPasteDialogOpen: false
             }
-        case 'SET_KEYBOARDCOLLECTION':
+        case 'UPDATE_KEYBOARDCOLLECTION':
             return {
                 ...state,
                 kbcollection: action.kbcollection
@@ -44,6 +44,19 @@ function App(state = {
                         ...state.kbcollection.keyboards,
                         action.keyboard
                     ]
+                }
+            }
+        case 'UPDATE_KEYBOARD':
+            return {
+                ...state,
+                kbcollection: {
+                    ...state.kbcollection,
+                    keyboards: state.kbcollection.keyboards.map((keyboard) => {
+                        if (keyboard === action.oldKeyboard) {
+                            return action.newKeyboard;
+                        }
+                        return keyboard;
+                    })
                 }
             }
         default:

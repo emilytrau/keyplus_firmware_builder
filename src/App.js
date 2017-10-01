@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { openDrawer, closeDrawer, openKLEPasteDialog, closeKLEPasteDialog, setKBCollection, showSnackbar } from './actions/App.js';
+import { openDrawer, closeDrawer, openKLEPasteDialog, closeKLEPasteDialog, updateKBCollection, showSnackbar } from './actions/App.js';
 import { withStyles } from 'material-ui/styles';
 import BuilderAppBar from './presentation/BuilderAppBar.js';
 import BuilderDrawer from './presentation/BuilderDrawer.js';
@@ -41,7 +41,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
         dispatch(closeKLEPasteDialog());
     },
     onSetKBCollection: (kbcollection) => {
-        dispatch(setKBCollection(kbcollection));
+        dispatch(updateKBCollection(kbcollection));
     },
     onShowSnackbarMessage: (message) => {
         dispatch(showSnackbar(message));
@@ -83,7 +83,10 @@ class App extends React.Component {
 
         return (
             <div className={ classes.app }>
-                <BuilderAppBar onRequestDrawerOpen={ this.props.onRequestDrawerOpen } />
+                <BuilderAppBar 
+                    onRequestDrawerOpen={ this.props.onRequestDrawerOpen }
+                    title={ this.props.kbcollection ? this.props.kbcollection.name : '' }
+                />
                 <BuilderDrawer 
                     open={ this.props.isDrawerOpen || !this.props.kbcollection }
                     onUseConfigUpload={ this.handleUseConfigUpload }

@@ -28,7 +28,7 @@ class BuilderAppBar extends React.Component {
                         <MenuIcon />
                     </IconButton>
                     <Typography type='title' color='inherit' className={ classes.title }>
-                        keyplus Firmware Builder
+                        { this.props.title }
                     </Typography>
                 </Toolbar>
             </AppBar>
@@ -39,7 +39,8 @@ class BuilderAppBar extends React.Component {
 BuilderAppBar.propTypes = {
     classes: PropTypes.object.isRequired,
     // External props
-    onRequestDrawerOpen: PropTypes.func.isRequired
+    onRequestDrawerOpen: PropTypes.func.isRequired,
+    title: PropTypes.string.isRequired
 }
 
 export default withStyles(styles)(BuilderAppBar);

@@ -6,7 +6,6 @@ import Paper from 'material-ui/Paper';
 const styles = theme => ({
     root: {
         width: '100%',
-        height: '100%',
         boxSizing: 'border-box',
         padding: theme.spacing.unit
     },
@@ -15,7 +14,7 @@ const styles = theme => ({
     }
 });
 
-class BuilderTab extends React.Component {
+class Section extends React.Component {
     render() {
         const classes = this.props.classes;
         return (
@@ -28,9 +27,9 @@ class BuilderTab extends React.Component {
     }
 }
 
-BuilderTab.propTypes = {
+Section.propTypes = {
     classes: PropTypes.object.isRequired,
     children: PropTypes.node
 }
 
-export default withStyles(styles)(BuilderTab);
+export default withStyles(styles)(Section);

@@ -1,5 +1,5 @@
 import JSON5 from 'json5';
-import KBCollection from './KBCollection';
+import KBCollection from './KBCollection.js';
 import config from './../config.js';
 
 // Creates a Promise<Keyboard> instance from KLE raw data

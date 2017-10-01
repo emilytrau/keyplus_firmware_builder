@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
-import BuilderTab from './BuilderTab';
-import FormBuilder from './FormBuilder';
+import Section from './Section.js';
+import FormBuilder from './FormBuilder.js';
 import KBCollection from './../utils/KBCollection.js';
 
 const styles = theme => ({
@@ -42,7 +42,7 @@ class BuilderTabCollectionSettings extends React.Component {
 
     render() {
         return (
-            <BuilderTab>
+            <Section>
                 <FormBuilder value={ this.state.value } onChange={ this.handleChange } form={[
                     {
                         type: 'textfield',
@@ -60,7 +60,7 @@ class BuilderTabCollectionSettings extends React.Component {
                 >
                     Update
                 </Button>
-            </BuilderTab>
+            </Section>
         );
     }
 }

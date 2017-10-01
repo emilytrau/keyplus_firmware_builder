@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
-import BuilderTab from './BuilderTab';
-import BuilderKeyboard from './BuilderKeyboard';
+import Section from './Section.js';
+import BuilderKeyboard from './../container/BuilderKeyboard.js';
 
 const styles = theme => ({
     keyboardDisplay: {
@@ -17,16 +17,11 @@ class BuilderTabKeymap extends React.Component {
         const { classes, keyboard } = this.props;
 
         return (
-            <BuilderTab>
+            <Section>
                 <div className={ classes.keyboardDisplay }>
-                    <BuilderKeyboard
-                        keyboard={ keyboard }
-                        selectedKeyIndex={ Math.floor(Math.random() * 50) }
-                        zoom={ 50 }
-                        onKeyClick={ console.log }
-                    />
+                    <BuilderKeyboard />
                 </div>
-            </BuilderTab>
+            </Section>
         );
     }
 }

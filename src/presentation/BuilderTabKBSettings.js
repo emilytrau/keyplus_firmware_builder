@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
-import BuilderTab from './BuilderTab';
+import Section from './Section.js';
 import FormBuilder from './FormBuilder';
 import Keyboard from './../utils/Keyboard.js';
 
@@ -42,7 +42,7 @@ class BuilderTabKBSettings extends React.Component {
 
     render() {
         return (
-            <BuilderTab>
+            <Section>
                 <FormBuilder value={ this.state.value } onChange={ this.handleChange } form={[
                     {
                         type: 'textfield',
@@ -60,7 +60,7 @@ class BuilderTabKBSettings extends React.Component {
                 >
                     Update
                 </Button>
-            </BuilderTab>
+            </Section>
         );
     }
 }

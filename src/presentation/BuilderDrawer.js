@@ -5,7 +5,7 @@ import Drawer from 'material-ui/Drawer';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import FileUploadIcon from 'material-ui-icons/FileUpload';
-import ContentPasteIcon from 'material-ui-icons/ContentPaste';
+import AddIcon from 'material-ui-icons/Add';
 import GitHubSvgIcon from './../resources/GitHubSvgIcon.js';
 import KeyplusSvgIcon from './../resources/KeyplusSvgIcon.js';
 
@@ -33,9 +33,9 @@ class BuilderDrawer extends React.Component {
                             </ListItem>
                             <ListItem button onClick={ this.props.onUseClipboardKLE }>
                                 <ListItemIcon>
-                                    <ContentPasteIcon />
+                                    <AddIcon />
                                 </ListItemIcon>
-                                <ListItemText primary='Upload KLE from clipboard' />
+                                <ListItemText primary='New collection' />
                             </ListItem>
                         </List>
                         <Divider />

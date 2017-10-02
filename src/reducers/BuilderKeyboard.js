@@ -22,7 +22,7 @@ function BuilderKeyboard(state = {
         case 'SELECT_KEYBOARD_KEY':
             return {
                 ...state,
-                selectedKeyIndex: action.index
+                selectedKeyIndex: state.selectedKeyIndex === action.index ? -1 : action.index
             }
         case 'SELECT_KEYBOARD_MATRIXVIEW':
             return {

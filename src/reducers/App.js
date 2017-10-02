@@ -59,6 +59,27 @@ function App(state = {
                     })
                 }
             }
+        case 'UPDATE_KEY':
+            return {
+                ...state,
+                kbcollection: {
+                    ...state.kbcollection,
+                    keyboards: state.kbcollection.keyboards.map((keyboard, index) => {
+                        if (action.keyboardIndex === index) {
+                            return {
+                                ...keyboard,
+                                layout: keyboard.layout.map((key, keyIndex) => {
+                                    if (action.index === keyIndex) {
+                                        return action.newKey;
+                                    }
+                                    return key;
+                                })
+                            }
+                        }
+                        return keyboard;
+                    })
+                }
+            }
         default:
             return state
     }

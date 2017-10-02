@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { openSidebarDrawer, closeSidebarDrawer, setKeyboard, setTab, openKLEPasteDialog, closeKLEPasteDialog } from './../actions/BuilderMain.js';
-import { showSnackbar, updateKBCollection, addKeyboard, updateKeyboard } from './../actions/App.js';
+import { showSnackbar, updateKBCollection, addKeyboard, updateKeyboard, updateKey } from './../actions/App.js';
 import { withStyles } from 'material-ui/styles';
 import Hidden from 'material-ui/Hidden';
 import Paper from 'material-ui/Paper';
@@ -78,6 +78,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     },
     onUpdateKBCollection: (newCollection) => {
         dispatch(updateKBCollection(newCollection));
+    },
+    onUpdateKey: (keyboardIndex, index, newKey) => {
+        dispatch(updateKey(keyboardIndex, index, newKey));
     }
 });
 
@@ -115,7 +118,7 @@ class BuilderMain extends React.Component {
 
     getTab() {
         const selectedKeyboard = this.props.kbcollection.keyboards[this.props.selectedKeyboardIndex];
-        const { selectedTab, selectedKeyIndex } = this.props;
+        const { kbcollection, selectedTab, selectedKeyboardIndex, selectedKeyIndex, onUpdateKBCollection, onUpdateKeyboard, onUpdateKey } = this.props;
 
         switch(selectedTab) {
             case 'keymap':
@@ -127,16 +130,17 @@ class BuilderMain extends React.Component {
                 return <BuilderTabMatrix
                     keyboard={ selectedKeyboard }
                     selectedKeyIndex={ selectedKeyIndex }
+                    onUpdateKey={ (index, newKey) => onUpdateKey(selectedKeyboardIndex, index, newKey) }
                 />
             case 'kbsettings':
                 return <BuilderTabKBSettings
                     keyboard={ selectedKeyboard }
-                    onUpdateKeyboard={ (newKeyboard) => this.props.onUpdateKeyboard(selectedKeyboard, newKeyboard) }
+                    onUpdateKeyboard={ (newKeyboard) => onUpdateKeyboard(selectedKeyboard, newKeyboard) }
                 />
             case 'collectionsettings':
                 return <BuilderTabCollectionSettings
-                    kbcollection={ this.props.kbcollection }
-                    onUpdateKBCollection={ this.props.onUpdateKBCollection }
+                    kbcollection={ kbcollection }
+                    onUpdateKBCollection={ onUpdateKBCollection }
                 />
             default:
                 return <div>{ selectedTab }</div>
@@ -216,6 +220,7 @@ BuilderMain.propTypes = {
     onAddKeyboard: PropTypes.func.isRequired,
     onUpdateKeyboard: PropTypes.func.isRequired,
     onUpdateKBCollection: PropTypes.func.isRequired,
+    onUpdateKey: PropTypes.func.isRequired,
     kbcollection: PropTypes.object.isRequired,
     selectedKeyboardIndex: PropTypes.number.isRequired,
     selectedTab: PropTypes.string.isRequired,

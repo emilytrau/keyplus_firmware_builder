@@ -50,3 +50,12 @@ export function updateKeyboard(oldKeyboard, newKeyboard) {
         newKeyboard
     }
 }
+
+export function updateKey(keyboardIndex, index, newKey) {
+    return {
+        type: 'UPDATE_KEY',
+        keyboardIndex,
+        index,
+        newKey
+    }
+}

@@ -39,37 +39,40 @@ const styles = theme => ({
     key: {
         // Black outline with white border
         '& > div': {
-            position: 'absolute',
-            background: 'black',
-            'box-shadow': 'inset 0 0 0 3px white'
+            position: 'absolute'
         },
-        // Frame for inner fill
-        '& > div > div': {
-            position: 'relative',
-            width: '100%',
-            height: '100%'
-        },
-        // Inner fill and text
-        '& > div > div > div': {
-            ...theme.typography.body1,
-            display: 'flex',
-            'align-items': 'center',
-            'justify-content': 'center',
-            position: 'absolute',
-            left: 6,
-            right: 6,
-            top: 6,
-            bottom: 6,
-            background: 'white',
-            'z-index': 1
-        },
-        '&:hover > div > div > div': {
+        '&:hover > div > div': {
             background: 'lightgrey'
         }
     },
+    keyFill: {
+        ...theme.typography.body1,
+        display: 'flex',
+        'align-items': 'center',
+        'justify-content': 'center',
+        position: 'absolute',
+        left: 6,
+        right: 6,
+        top: 6,
+        bottom: 6,
+        'user-select': 'none',
+        background: 'white',
+        'z-index': 1
+    },
+    keyBorder: {
+        position: 'absolute',
+        left: 3,
+        right: 3,
+        top: 3,
+        bottom: 3,
+        'border-color': 'black',
+        'border-width': '3px',
+        'border-radius': '3px',
+        'border-style': 'solid'
+    },
     selected: {
-        '& > div': {
-            background: 'red'
+        '& > div > div': {
+            'border-color': 'red'
         }
     },
     matrixConnectionsOverlay: {
@@ -83,11 +86,14 @@ const styles = theme => ({
     },
     matrixHorizontalLine: {
         stroke: 'blue',
-        'stroke-width': 0.1,
+        'stroke-width': 0.05
     },
     matrixVerticalLine: {
         stroke: 'red',
-        'stroke-width': 0.1
+        'stroke-width': 0.05
+    },
+    matrixDot: {
+        fill: 'grey'
     }
 });
 
@@ -171,9 +177,8 @@ class BuilderKeyboard extends React.Component {
                                                     height: h2 * zoom
                                                 }}
                                             >
-                                                <div>
-                                                    <div />
-                                                </div>
+                                                <div className={ classes.keyBorder } />
+                                                <div className={ classes.keyFill } />
                                             </div>
                                             <div style={{
                                                     left: x * zoom,
@@ -181,20 +186,20 @@ class BuilderKeyboard extends React.Component {
                                                     width: width * zoom,
                                                     height: height * zoom
                                             }}>
-                                                <div>
-                                                    <div style={{
+                                                <div className={ classes.keyBorder } />
+                                                <div
+                                                    style={{
                                                         fontSize: zoom * 0.2
-                                                    }}>
-                                                        {
-                                                            keymap ? (
-                                                                ''
-                                                            ) : matrix ? (
-                                                                matrixView === 'values' ? (
-                                                                    row + ',' + column
-                                                                ) : ''
-                                                            ) : ''
-                                                        }
-                                                    </div>
+                                                    }}
+                                                    className={ classes.keyFill }
+                                                >
+                                                    {
+                                                        keymap ? (
+                                                            ''
+                                                        ) : matrix && matrixView === 'values' ? (
+                                                            row + ',' + column
+                                                        ) : ''
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
@@ -219,9 +224,9 @@ class BuilderKeyboard extends React.Component {
                                     }, {});
 
                                     const distance = (x1, y1, x2, y2) => Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
-                                    const nearestNeighbor = (column, row, neighbors) => {
+                                    const nearestNeighbor = (x, y, neighbors) => {
                                         return neighbors.reduce((prev, curr) => {
-                                            const distanceToKey = distance(column, row, curr.column, curr.row);
+                                            const distanceToKey = distance(x, y, curr.x, curr.y);
                                             return distanceToKey < prev[1] ? [curr, distanceToKey] : prev
                                         }, [null, Number.MAX_VALUE])[0]
                                     }
@@ -229,34 +234,41 @@ class BuilderKeyboard extends React.Component {
                                     const getLinePointY = (key) => key.y + (key.height / 2);
 
                                     const lines = [].concat(...keyboard.layout.map((key, index) => {
-                                        const { row, column } = key;
-                                        const rightNeighbor = nearestNeighbor(column, row, ((matrixKeyMap[column + 1] || {})[row] || []));
-                                        const bottomNeighbor = nearestNeighbor(column, row, ((matrixKeyMap[column] || {})[row + 1] || []));
-                                       
-                                        const x = getLinePointX(key);
-                                        const y = getLinePointY(key);
+                                        const { row, column, x, y } = key;
+                                        const rightNeighbor = nearestNeighbor(x, y, ((matrixKeyMap[column + 1] || {})[row] || []));
+                                        const bottomNeighbor = nearestNeighbor(x, y, ((matrixKeyMap[column] || {})[row + 1] || []));
+                                        
+                                        const pointX = getLinePointX(key);
+                                        const pointY = getLinePointY(key);
 
                                         return [
                                             rightNeighbor ? (
                                                 <line
-                                                    x1={ x }
-                                                    y1={ y }
+                                                    x1={ pointX }
+                                                    y1={ pointY }
                                                     x2={ getLinePointX(rightNeighbor) }
                                                     y2={ getLinePointY(rightNeighbor) }
                                                     className={ classes.matrixHorizontalLine }
-                                                    key={ index * 2}
+                                                    key={ index * 3}
                                                 />
                                              ) : null,
                                             bottomNeighbor ? (
                                                 <line
-                                                    x1={ x }
-                                                    y1={ y }
+                                                    x1={ pointX }
+                                                    y1={ pointY }
                                                     x2={ getLinePointX(bottomNeighbor) }
                                                     y2={ getLinePointY(bottomNeighbor) }
                                                     className={ classes.matrixVerticalLine }
-                                                    key={ index * 2 + 1}
+                                                    key={ index * 3 + 1}
                                                 />
-                                            ) : null
+                                            ) : null,
+                                            <circle 
+                                                cx={ pointX }
+                                                cy={ pointY }
+                                                r={ 0.07 }
+                                                className={ classes.matrixDot }
+                                                key={ index * 3 + 2}
+                                            />
                                         ];
                                     }));
 

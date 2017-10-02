@@ -1,7 +1,8 @@
 function BuilderKeyboard(state = {
     zoom: 50,
     selectedKeyIndex: -1,
-    matrixView: 'values'
+    matrixView: 'values',
+    flipped: false
 }, action) {
     switch(action.type) {
         case 'ZOOM_KEYBOARD_IN':
@@ -28,6 +29,11 @@ function BuilderKeyboard(state = {
             return {
                 ...state,
                 matrixView: action.view
+            }
+        case 'FLIP_KEYBOARD':
+            return {
+                ...state,
+                flipped: !state.flipped
             }
         default:
             return state;

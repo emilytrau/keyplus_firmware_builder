@@ -29,3 +29,9 @@ export function selectMatrixView(view) {
         view
     }
 }
+
+export function flip() {
+    return {
+        type: 'FLIP_KEYBOARD'
+    }
+}

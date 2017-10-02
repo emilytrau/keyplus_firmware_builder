@@ -9,6 +9,7 @@ import Paper from 'material-ui/Paper';
 import Button from 'material-ui/Button';
 import Drawer from 'material-ui/Drawer';
 import ChevronRightIcon from 'material-ui-icons/ChevronRight';
+import ScrollContainer from './../presentation/ScrollContainer.js'
 import BuilderSidebarList from './../presentation/BuilderSidebarList.js';
 import BuilderKLEPasteDialog from './../presentation/BuilderKLEPasteDialog';
 import BuilderTabKeymap from './../presentation/BuilderTabKeymap.js';
@@ -30,10 +31,8 @@ const styles = theme => ({
     sidebarOpenButton: {
         position: 'fixed',
         bottom: 20,
-        right: 20
-    },
-    sidebarDrawer: {
-        width: 'auto'
+        right: 20,
+        'z-index': 5
     },
     content: {
         flex: 1
@@ -172,7 +171,6 @@ class BuilderMain extends React.Component {
                             <Button
                                 fab
                                 color='accent'
-                                aria-label='sidebar'
                                 onClick={ this.props.onRequestOpenSidebar }
                                 className={ classes.sidebarOpenButton }
                             >
@@ -183,15 +181,15 @@ class BuilderMain extends React.Component {
                                 open={ this.props.isSidebarDrawerOpen }
                                 onRequestClose={ this.props.onRequestCloseSidebar }
                             >
-                                <div tabIndex={0} role="button" onClick={ this.props.onRequestCloseSidebar }>
-                                    { this.getSidebar() }
-                                </div>
+                                { this.getSidebar() }
                             </Drawer>
                         </div>
                     </Hidden>
                 </div>
                 <div className={ classes.content }>
-                    { this.getTab() }
+                    <ScrollContainer y>
+                        { this.getTab() }
+                    </ScrollContainer>
                 </div>
                 <BuilderKLEPasteDialog
                     open={ this.props.isKLEPasteDialogOpen }

@@ -22,3 +22,10 @@ export function selectKey(index) {
         index
     }
 }
+
+export function selectMatrixView(view) {
+    return {
+        type: 'SELECT_KEYBOARD_MATRIXVIEW',
+        view
+    }
+}

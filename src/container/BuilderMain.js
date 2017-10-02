@@ -43,6 +43,7 @@ const mapStateToProps = (state, ownProps) => ({
     kbcollection: state.app.kbcollection,
     selectedKeyboardIndex: state.main.selectedKeyboard,
     selectedTab: state.main.selectedTab,
+    selectedKeyIndex: state.keyboard.selectedKeyIndex,
     isSidebarDrawerOpen: state.main.isSidebarDrawerOpen,
     isKLEPasteDialogOpen: state.main.isKLEPasteDialogOpen
 });
@@ -114,16 +115,18 @@ class BuilderMain extends React.Component {
 
     getTab() {
         const selectedKeyboard = this.props.kbcollection.keyboards[this.props.selectedKeyboardIndex];
-        const selectedTab = this.props.selectedTab;
+        const { selectedTab, selectedKeyIndex } = this.props;
 
         switch(selectedTab) {
             case 'keymap':
                 return <BuilderTabKeymap
                     keyboard={ selectedKeyboard }
+                    selectedKeyIndex={ selectedKeyIndex }
                 />
             case 'matrix':
                 return <BuilderTabMatrix
                     keyboard={ selectedKeyboard }
+                    selectedKeyIndex={ selectedKeyIndex }
                 />
             case 'kbsettings':
                 return <BuilderTabKBSettings

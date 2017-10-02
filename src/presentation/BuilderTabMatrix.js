@@ -9,13 +9,19 @@ const styles = theme => ({
 });
 
 class BuilderTabMatrix extends React.Component {
+
     render() {
         const { classes, keyboard } = this.props;
 
         return (
-            <Section>
-                <BuilderKeyboard />
-            </Section>
+            <div>
+                <Section>
+                    <BuilderKeyboard matrix />
+                </Section>
+                <Section>
+
+                </Section>
+            </div>
         );
     }
 }
@@ -23,7 +29,8 @@ class BuilderTabMatrix extends React.Component {
 BuilderTabMatrix.propTypes = {
     classes: PropTypes.object.isRequired,
     // External props
-    keyboard: PropTypes.object.isRequired
+    keyboard: PropTypes.object.isRequired,
+    selectedKeyIndex: PropTypes.number.isRequired
 }
 
 export default withStyles(styles)(BuilderTabMatrix);

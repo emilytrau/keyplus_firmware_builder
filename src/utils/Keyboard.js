@@ -7,8 +7,8 @@ class Keyboard {
             throw new Error('Invalid keyboard data');
         }
         data.layers.forEach((layer) => {
-            if (layer.length !== data.matrixColumns) {
-                throw new Error('')
+            if (layer.length !== data.matrixRows) {
+                throw new Error('Invalid')
             }
         });
 

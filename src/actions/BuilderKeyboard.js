@@ -23,6 +23,13 @@ export function selectKey(index) {
     }
 }
 
+export function selectLayer(layer) {
+    return {
+        type: 'SELECT_KEYBOARD_LAYER',
+        layer
+    }
+}
+
 export function selectMatrixView(view) {
     return {
         type: 'SELECT_KEYBOARD_MATRIXVIEW',

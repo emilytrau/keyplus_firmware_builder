@@ -1,11 +1,11 @@
 import Keyboard from './Keyboard.js';
-import config from './../config.js';
+import schemaConfig from './../config/schema.js';
 
 // Data structure to store multiple keyboards
 class KBCollection {
     constructor(data) {
         // TODO: implement a more robust schema validation technique
-        if (data.majorVersion !== config.SchemaMajorVersion) {
+        if (data.majorVersion !== schemaConfig.SchemaMajorVersion) {
             throw new Error('Configuration is incompatible with this version of the builder');
         }
         if ((data.name && data.minorVersion && data.keyboards) === undefined) {

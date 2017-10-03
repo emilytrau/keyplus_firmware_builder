@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { selectKey, zoomIn, zoomOut, zoomReset, selectMatrixView, flip } from './../actions/BuilderKeyboard.js';
+import { selectKey, zoomIn, zoomOut, zoomReset, selectLayer, selectMatrixView, flip } from './../actions/BuilderKeyboard.js';
 import { withStyles } from 'material-ui/styles';
 import IconButton from 'material-ui/IconButton';
 import ZoomInIcon from 'material-ui-icons/ZoomIn';
@@ -10,6 +10,8 @@ import Button from 'material-ui/Button';
 import { FormControlLabel } from 'material-ui/Form';
 import Radio, { RadioGroup } from 'material-ui/Radio';
 import Checkbox from 'material-ui/Checkbox';
+import TextField from 'material-ui/TextField';
+import { getShortLabel } from './../utils/Keycode.js';
 
 const styles = theme => ({
     root: {
@@ -54,24 +56,28 @@ const styles = theme => ({
         display: 'flex',
         'align-items': 'center',
         'justify-content': 'center',
+        'text-align': 'center',
+        'padding': 2,
         position: 'absolute',
-        left: 6,
-        right: 6,
-        top: 6,
-        bottom: 6,
+        left: 4,
+        right: 4,
+        top: 4,
+        bottom: 4,
+        'border-radius': 8,
         'user-select': 'none',
+        'overflow-wrap': 'break-word',
         background: 'white',
         'z-index': 1
     },
     keyBorder: {
         position: 'absolute',
-        left: 3,
-        right: 3,
-        top: 3,
-        bottom: 3,
+        left: 2,
+        right: 2,
+        top: 2,
+        bottom: 2,
         'border-color': 'black',
-        'border-width': '3px',
-        'border-radius': '3px',
+        'border-width': 2,
+        'border-radius': 8,
         'border-style': 'solid'
     },
     selected: {
@@ -105,6 +111,7 @@ const mapStateToProps = (state, ownProps) => ({
     keyboard: state.app.kbcollection.keyboards[state.main.selectedKeyboard],
     selectedKeyIndex: state.keyboard.selectedKeyIndex,
     zoom: state.keyboard.zoom,
+    layer: state.keyboard.layer,
     matrixView: state.keyboard.matrixView,
     flipped: state.keyboard.flipped
 });
@@ -122,6 +129,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     onZoomReset: () => {
         dispatch(zoomReset());
     },
+    onSelectLayer: (layer) => {
+        dispatch(selectLayer(layer));
+    },
     onSelectMatrixView: (view) => {
         dispatch(selectMatrixView(view));
     },
@@ -132,7 +142,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
 class BuilderKeyboard extends React.Component {
     render() {
-        const { classes, keyboard, selectedKeyIndex, zoom, flipped, matrixView, onKeyClick, onZoomIn, onZoomOut, onZoomReset, onSelectMatrixView, onFlip, keymap, matrix } = this.props;
+        const { classes, keyboard, selectedKeyIndex, zoom, flipped, layer, matrixView, onKeyClick, onZoomIn, onZoomOut, onZoomReset, onSelectLayer, onSelectMatrixView, onFlip, keymap, matrix } = this.props;
         const [ maxWidth, maxHeight ] = keyboard.layout.reduce((prev, curr) => {
             return [
                 Math.max(prev[0], curr.x + curr.width, curr.x + curr.x2 + curr.w2),
@@ -193,7 +203,8 @@ class BuilderKeyboard extends React.Component {
                                                     left: (x + x2) * zoom,
                                                     top: (y + y2) * zoom,
                                                     width: w2 * zoom,
-                                                    height: h2 * zoom
+                                                    height: h2 * zoom,
+                                                    display: w2 === 0 && h2 === 0 ? 'none' : 'block'
                                                 }}
                                             >
                                                 <div className={ classes.keyBorder } />
@@ -209,13 +220,14 @@ class BuilderKeyboard extends React.Component {
                                                 <div
                                                     style={{
                                                         fontSize: zoom * 0.2,
+                                                        lineHeight: zoom * 0.2 + 'px',
                                                         transform: flipped ? 'scaleX(-1)' : ''
                                                     }}
                                                     className={ classes.keyFill }
                                                 >
                                                     {
                                                         keymap ? (
-                                                            ''
+                                                            getShortLabel(keyboard.layers[layer][row][column])
                                                         ) : matrix && matrixView === 'values' ? (
                                                             row + ',' + column
                                                         ) : ''
@@ -229,14 +241,14 @@ class BuilderKeyboard extends React.Component {
                             {
                                 // Matrix connections overlay
                                 matrix && matrixView === 'connections' ? (() => {
-                                    // Transform in to a 2D array of Array<Key>, with matrix column and row as the key
+                                    // Transform in to a 2D array of Array<Key>, with matrix row and column as the key
                                     const matrixKeyMap = keyboard.layout.reduce((prev, curr) => {
                                         return {
                                             ...prev,
-                                            [curr.column]: {
-                                                ...(prev[curr.column] || {}),
-                                                [curr.row]: [
-                                                    ...((prev[curr.column] || {})[curr.row] || {}),
+                                            [curr.row]: {
+                                                ...(prev[curr.row] || {}),
+                                                [curr.column]: [
+                                                    ...((prev[curr.row] || {})[curr.column] || {}),
                                                     curr
                                                 ]
                                             }
@@ -258,8 +270,8 @@ class BuilderKeyboard extends React.Component {
                                         const x = getLinePointX(key);
                                         const y = getLinePointY(key);
 
-                                        const rightNeighbor = nearestNeighbor(x, y, ((matrixKeyMap[column + 1] || {})[row] || []));
-                                        const bottomNeighbor = nearestNeighbor(x, y, ((matrixKeyMap[column] || {})[row + 1] || []));
+                                        const rightNeighbor = nearestNeighbor(x, y, ((matrixKeyMap[row] || {})[column + 1] || []));
+                                        const bottomNeighbor = nearestNeighbor(x, y, ((matrixKeyMap[row + 1] || {})[column] || []));
 
                                         return [
                                             rightNeighbor ? (
@@ -310,9 +322,14 @@ class BuilderKeyboard extends React.Component {
                 <div className={ classes.controls }>
                     {
                         keymap ? (
-                            <div>
-
-                            </div>
+                            <span>
+                                <TextField
+                                    label='Layer'
+                                    type='number'
+                                    value={ layer }
+                                    onChange={ (e) => onSelectLayer(Math.max(Math.min(e.target.value, 15), 0)) }
+                                />
+                            </span>
                         ) : matrix ? (
                             <RadioGroup
                                 row
@@ -336,11 +353,13 @@ BuilderKeyboard.propTypes = {
     selectedKeyIndex: PropTypes.number.isRequired,
     zoom: PropTypes.number.isRequired,
     flipped: PropTypes.bool.isRequired,
+    layer: PropTypes.number.isRequired,
     matrixView: PropTypes.string.isRequired,
     onKeyClick: PropTypes.func.isRequired,
     onZoomIn: PropTypes.func.isRequired,
     onZoomOut: PropTypes.func.isRequired,
     onZoomReset: PropTypes.func.isRequired,
+    onSelectLayer: PropTypes.func.isRequired,
     onSelectMatrixView: PropTypes.func.isRequired,
     onFlip: PropTypes.func.isRequired,
     // External props

@@ -1,6 +1,7 @@
 function BuilderKeyboard(state = {
     zoom: 50,
     selectedKeyIndex: -1,
+    layer: 0,
     matrixView: 'values',
     flipped: false
 }, action) {
@@ -24,6 +25,11 @@ function BuilderKeyboard(state = {
             return {
                 ...state,
                 selectedKeyIndex: state.selectedKeyIndex === action.index ? -1 : action.index
+            }
+        case 'SELECT_KEYBOARD_LAYER':
+            return {
+                ...state,
+                layer: action.layer
             }
         case 'SELECT_KEYBOARD_MATRIXVIEW':
             return {

@@ -1,6 +1,6 @@
 import JSON5 from 'json5';
 import KBCollection from './KBCollection.js';
-import config from './../config.js';
+import schemaConfig from './../config/schema.js';
 
 // Creates a Promise<Keyboard> instance from KLE raw data
 function KLELoader(kleData) {
@@ -18,6 +18,7 @@ function KLELoader(kleData) {
             let y = 0;
             let rowCount = 0;
             let columnCount = 0;
+            let maxColumnCount = 0;
             // Non persistent values
             let width = 1;
             let height = 1;
@@ -74,28 +75,32 @@ function KLELoader(kleData) {
                     decal = false;
                 });
 
+                maxColumnCount = Math.max(maxColumnCount, columnCount);
                 y++;
                 rowCount++;
             });
 
             let layers = [];
-            for (let r = 0; r < rowCount + 1; r++) {
-                layers[r] = [];
-                for (let c = 0; c < columnCount + 1; c++) {
-                    layers[r][c] = 'NONE';
+            for (let l = 0; l < 16; l++) {
+                layers[l] = [];
+                for (let r = 0; r < rowCount; r++) {
+                    layers[l][r] = [];
+                    for (let c = 0; c < maxColumnCount; c++) {
+                        layers[l][r][c] = l === 0 ? 'KC_NONE' : 'KC_TRANSPARENT';
+                    }
                 }
             }
 
             collection = new KBCollection({
                 name: 'Untitled collection',
-                majorVersion: config.SchemaMajorVersion,
-                minorVersion: config.SchemaMinorVersion,
+                majorVersion: schemaConfig.SchemaMajorVersion,
+                minorVersion: schemaConfig.SchemaMinorVersion,
                 keyboards: [
                     {
                         name: 'Untitled keyboard',
                         layout,
-                        matrixRows: rowCount + 1,
-                        matrixColumns: columnCount + 1,
+                        matrixRows: rowCount,
+                        matrixColumns: maxColumnCount,
                         layers
                     }
                 ]

@@ -1,5 +1,6 @@
 import JSON5 from 'json5';
 import KBCollection from './KBCollection.js';
+import { lookupKeycode } from './Keycode.js';
 import schemaConfig from './../config/schema.js';
 
 // Creates a Promise<Keyboard> instance from KLE raw data
@@ -14,6 +15,8 @@ function KLELoader(kleData) {
                 kle.shift();
             }
 
+            let layers = [[]];
+            
             let x = 0;
             let y = 0;
             let rowCount = 0;
@@ -32,6 +35,7 @@ function KLELoader(kleData) {
                 x = 0;
                 columnCount = 0;
 
+                layers[0][rowCount] = [];
                 row.forEach((column) => {
                     if (column instanceof Object) {
                         // Item is a modifier instead of key data
@@ -61,6 +65,9 @@ function KLELoader(kleData) {
                             row: rowCount,
                             column: columnCount
                         });
+                        
+                        const legends = column.split('\n');
+                        layers[0][rowCount][columnCount] = lookupKeycode(legends[legends.length - 1]);
                     }
 
                     x += width;
@@ -80,13 +87,12 @@ function KLELoader(kleData) {
                 rowCount++;
             });
 
-            let layers = [];
             for (let l = 0; l < 16; l++) {
-                layers[l] = [];
+                layers[l] = layers[l] || [];
                 for (let r = 0; r < rowCount; r++) {
-                    layers[l][r] = [];
+                    layers[l][r] = layers[l][r] || [];
                     for (let c = 0; c < maxColumnCount; c++) {
-                        layers[l][r][c] = l === 0 ? 'KC_NONE' : 'KC_TRANSPARENT';
+                        layers[l][r][c] = layers[l][r][c] || (l === 0 ? 'KC_NONE' : 'KC_TRANSPARENT');
                     }
                 }
             }
@@ -106,6 +112,7 @@ function KLELoader(kleData) {
                 ]
             });
         } catch(err) {
+            console.log(err)
             reject(err.message);
         }
         resolve(collection);

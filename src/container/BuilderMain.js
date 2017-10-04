@@ -44,6 +44,7 @@ const mapStateToProps = (state, ownProps) => ({
     selectedKeyboardIndex: state.main.selectedKeyboard,
     selectedTab: state.main.selectedTab,
     selectedKeyIndex: state.keyboard.selectedKeyIndex,
+    selectedLayer: state.keyboard.layer,
     isSidebarDrawerOpen: state.main.isSidebarDrawerOpen,
     isKLEPasteDialogOpen: state.main.isKLEPasteDialogOpen
 });
@@ -73,8 +74,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     onAddKeyboard: (keyboard) => {
         dispatch(addKeyboard(keyboard));
     },
-    onUpdateKeyboard: (oldKeyboard, newKeyboard) => {
-        dispatch(updateKeyboard(oldKeyboard, newKeyboard));
+    onUpdateKeyboard: (index, newKeyboard) => {
+        dispatch(updateKeyboard(index, newKeyboard));
     },
     onUpdateKBCollection: (newCollection) => {
         dispatch(updateKBCollection(newCollection));
@@ -117,14 +118,16 @@ class BuilderMain extends React.Component {
     }
 
     getTab() {
-        const selectedKeyboard = this.props.kbcollection.keyboards[this.props.selectedKeyboardIndex];
-        const { kbcollection, selectedTab, selectedKeyboardIndex, selectedKeyIndex, onUpdateKBCollection, onUpdateKeyboard, onUpdateKey } = this.props;
+        const { kbcollection, selectedTab, selectedKeyboardIndex, selectedKeyIndex, selectedLayer, onUpdateKBCollection, onUpdateKeyboard, onUpdateKey } = this.props;
+        const selectedKeyboard = kbcollection.keyboards[selectedKeyboardIndex];
 
         switch(selectedTab) {
             case 'keymap':
                 return <BuilderTabKeymap
                     keyboard={ selectedKeyboard }
                     selectedKeyIndex={ selectedKeyIndex }
+                    selectedLayer={ selectedLayer }
+                    onUpdateKeyboard={ (newKeyboard) => onUpdateKeyboard(selectedKeyboardIndex, newKeyboard) }
                 />
             case 'matrix':
                 return <BuilderTabMatrix
@@ -135,7 +138,7 @@ class BuilderMain extends React.Component {
             case 'kbsettings':
                 return <BuilderTabKBSettings
                     keyboard={ selectedKeyboard }
-                    onUpdateKeyboard={ (newKeyboard) => onUpdateKeyboard(selectedKeyboard, newKeyboard) }
+                    onUpdateKeyboard={ (newKeyboard) => onUpdateKeyboard(selectedKeyboardIndex, newKeyboard) }
                 />
             case 'collectionsettings':
                 return <BuilderTabCollectionSettings
@@ -224,6 +227,7 @@ BuilderMain.propTypes = {
     kbcollection: PropTypes.object.isRequired,
     selectedKeyboardIndex: PropTypes.number.isRequired,
     selectedTab: PropTypes.string.isRequired,
+    selectedLayer: PropTypes.number.isRequired,
     isSidebarDrawerOpen: PropTypes.bool.isRequired,
     isKLEPasteDialogOpen: PropTypes.bool.isRequired
 }

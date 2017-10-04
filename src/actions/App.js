@@ -43,11 +43,11 @@ export function addKeyboard(keyboard) {
     }
 }
 
-export function updateKeyboard(oldKeyboard, newKeyboard) {
+export function updateKeyboard(index, keyboard) {
     return {
         type: 'UPDATE_KEYBOARD',
-        oldKeyboard,
-        newKeyboard
+        index,
+        keyboard
     }
 }
 

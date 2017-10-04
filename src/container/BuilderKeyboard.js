@@ -66,6 +66,7 @@ const styles = theme => ({
         'border-radius': 8,
         'user-select': 'none',
         'overflow-wrap': 'break-word',
+        overflow: 'hidden',
         background: 'white',
         'z-index': 1
     },

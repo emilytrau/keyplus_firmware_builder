@@ -51,9 +51,9 @@ function App(state = {
                 ...state,
                 kbcollection: {
                     ...state.kbcollection,
-                    keyboards: state.kbcollection.keyboards.map((keyboard) => {
-                        if (keyboard === action.oldKeyboard) {
-                            return action.newKeyboard;
+                    keyboards: state.kbcollection.keyboards.map((keyboard, index) => {
+                        if (index === action.index) {
+                            return action.keyboard;
                         }
                         return keyboard;
                     })

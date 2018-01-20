@@ -8,14 +8,16 @@ class KBCollection {
         if (data.majorVersion !== schemaConfig.SchemaMajorVersion) {
             throw new Error('Configuration is incompatible with this version of the builder');
         }
-        if ((data.name && data.minorVersion && data.keyboards) === undefined) {
+        if ((data.uuid && data.name && data.minorVersion && data.keyboards && data.firmwareSettings) === undefined) {
             throw new Error('Invalid collection data');
         }
 
+        this.uuid = data.uuid;
         this.name = data.name;
         this.majorVersion = data.majorVersion;
         this.minorVersion = data.minorVersion;
         this.keyboards = data.keyboards.map(kbData => new Keyboard(kbData));
+        this.firmwareSettings = data.firmwareSettings;
     }
 }
 

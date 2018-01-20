@@ -328,7 +328,7 @@ class BuilderKeyboard extends React.Component {
                                     label='Layer'
                                     type='number'
                                     value={ layer }
-                                    onChange={ (e) => onSelectLayer(Math.max(Math.min(e.target.value, 15), 0)) }
+                                    onChange={ (e) => onSelectLayer(Math.max(Math.min(parseInt(e.target.value, 10), 15), 0)) }
                                 />
                             </span>
                         ) : matrix ? (

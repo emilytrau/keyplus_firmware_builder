@@ -1,7 +1,11 @@
 import JSON5 from 'json5';
+import uuidv4 from 'uuid/v4';
 import KBCollection from './KBCollection.js';
 import { lookupKeycode } from './Keycode.js';
 import schemaConfig from './../config/schema.js';
+
+const NONE_KEYCODE = lookupKeycode('none');
+const TRANSPARENT_KEYCODE = lookupKeycode('transparent');
 
 // Creates a Promise<Keyboard> instance from KLE raw data
 function KLELoader(kleData) {
@@ -30,6 +34,7 @@ function KLELoader(kleData) {
             let w2 = 0;
             let h2 = 0;
             let decal = false;
+            // TODO: Add rotation info
 
             kle.forEach((row) => {
                 x = 0;
@@ -92,24 +97,29 @@ function KLELoader(kleData) {
                 for (let r = 0; r < rowCount; r++) {
                     layers[l][r] = layers[l][r] || [];
                     for (let c = 0; c < maxColumnCount; c++) {
-                        layers[l][r][c] = layers[l][r][c] || (l === 0 ? 'KC_NONE' : 'KC_TRANSPARENT');
+                        layers[l][r][c] = layers[l][r][c] || (l === 0 ? NONE_KEYCODE : TRANSPARENT_KEYCODE);
                     }
                 }
             }
-
+            
             collection = new KBCollection({
+                uuid: uuidv4(),
                 name: 'Untitled collection',
                 majorVersion: schemaConfig.SchemaMajorVersion,
                 minorVersion: schemaConfig.SchemaMinorVersion,
                 keyboards: [
                     {
+                        uuid: uuidv4(),
                         name: 'Untitled keyboard',
                         layout,
                         matrixRows: rowCount,
                         matrixColumns: maxColumnCount,
                         layers
                     }
-                ]
+                ],
+                firmwareSettings: {
+                    layoutGroups: []
+                }
             });
         } catch(err) {
             console.log(err)

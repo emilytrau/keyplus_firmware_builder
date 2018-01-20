@@ -1,15 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
+import Divider from 'material-ui/Divider';
 import Button from 'material-ui/Button';
+import TextField from 'material-ui/TextField';
+import BuilderLayoutGroupSelector from './BuilderLayoutGroupSelector.js';
 import Section from './Section.js';
 import FormBuilder from './FormBuilder.js';
 import KBCollection from './../utils/KBCollection.js';
 
 const styles = theme => ({
     updateButton: {
-        marginLeft: theme.spacing.unit,
-        marginBottom: theme.spacing.unit
+        //marginLeft: theme.spacing.unit,
+        //marginBottom: theme.spacing.unit
+    },
+    section: {
+        padding: theme.spacing.unit
     }
 });
 
@@ -17,46 +23,51 @@ class BuilderTabCollectionSettings extends React.Component {
     constructor(props) {
         super(props);
 
-        const kbcollection = props.kbcollection;
-
         this.state = {
-            value: {
-                name: kbcollection.name
-            }
+            layoutGroups: props.kbcollection.firmwareSettings.layoutGroups
         }
 
-        this.handleChange = this.handleChange.bind(this);
         this.handleUpdate = this.handleUpdate.bind(this);
-    }
-
-    handleChange(newValue) {
-        this.setState({ value: newValue });
+        this.handleLayoutGroupChange = this.handleLayoutGroupChange.bind(this);
     }
 
     handleUpdate() {
-        this.props.onUpdateKBCollection(new KBCollection({
-            ...this.props.kbcollection,
-            name: this.state.value.name || 'Untitled collection'
+        const { onUpdateKBCollection, kbcollection } = this.props;
+        onUpdateKBCollection(new KBCollection({
+            ...kbcollection,
+            name: this.nameField.value || 'Untitled collection',
+            firmwareSettings: {
+                ...kbcollection.firmwareSettings,
+                layoutGroups: this.state.layoutGroups
+            }
         }));
     }
 
+    handleLayoutGroupChange(newValue) {
+        this.setState({ layoutGroups: newValue });
+    }
+
     render() {
+        const { classes, kbcollection } = this.props;
         return (
-            <Section>
-                <FormBuilder value={ this.state.value } onChange={ this.handleChange } form={[
-                    {
-                        type: 'textfield',
-                        name: 'name',
-                        label: 'Name',
-                        textfield: {
-                            placeholder: 'Untitled collection'
-                        }
-                    }
-                ]} />
+            <Section className={ classes.section }>
+                <TextField
+                    label='Name'
+                    placeholder='Untitled collection'
+                    defaultValue={ kbcollection.name }
+                    inputRef={ (r) => this.nameField = r }
+                />
+                <Divider />
+                <BuilderLayoutGroupSelector
+                    keyboards={ kbcollection.keyboards }
+                    onChange={ this.handleLayoutGroupChange }
+                    value={ this.state.layoutGroups }
+                />
+                <Divider />
                 <Button
                     raised
                     onClick={ this.handleUpdate }
-                    className={ this.props.classes.updateButton }
+                    className={ classes.updateButton }
                 >
                     Update
                 </Button>

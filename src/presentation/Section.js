@@ -16,11 +16,11 @@ const styles = theme => ({
 
 class Section extends React.Component {
     render() {
-        const classes = this.props.classes;
+        const { classes, children, ...other } = this.props;
         return (
             <div className={ classes.root }>
-                <Paper className={ classes.inner }>
-                    { this.props.children }
+                <Paper className={ classes.inner } { ...other }>
+                    { children }
                 </Paper>
             </div>
         );

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { openSidebarDrawer, closeSidebarDrawer, setKeyboard, setTab, openKLEPasteDialog, closeKLEPasteDialog } from './../actions/BuilderMain.js';
 import { showSnackbar, updateKBCollection, addKeyboard, updateKeyboard, updateKey } from './../actions/App.js';
+import { selectKey } from './../actions/BuilderKeyboard.js';
 import { withStyles } from 'material-ui/styles';
 import Hidden from 'material-ui/Hidden';
 import Paper from 'material-ui/Paper';
@@ -16,6 +17,7 @@ import BuilderTabKeymap from './../presentation/BuilderTabKeymap.js';
 import BuilderTabMatrix from './../presentation/BuilderTabMatrix.js';
 import BuilderTabKBSettings from './../presentation/BuilderTabKBSettings.js';
 import BuilderTabCollectionSettings from './../presentation/BuilderTabCollectionSettings.js';
+import BuilderTabCompile from './../presentation/BuilderTabCompile.js';
 import KLELoader from './../utils/KLELoader.js';
 import ConfigSaver from './../utils/ConfigSaver.js';
 
@@ -57,6 +59,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
         dispatch(closeSidebarDrawer());
     },
     onRequestSetKeybord: (index) => {
+        dispatch(selectKey(-1));
         dispatch(setKeyboard(index));
     },
     onRequestSetTab: (tab) => {
@@ -144,6 +147,10 @@ class BuilderMain extends React.Component {
                 return <BuilderTabCollectionSettings
                     kbcollection={ kbcollection }
                     onUpdateKBCollection={ onUpdateKBCollection }
+                />
+            case 'compile':
+                return <BuilderTabCompile
+                    kbcollection={ kbcollection }
                 />
             default:
                 return <div>{ selectedTab }</div>

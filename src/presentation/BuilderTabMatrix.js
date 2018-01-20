@@ -35,11 +35,9 @@ class BuilderTabMatrix extends React.Component {
                                 disabled={ selectedKeyIndex === -1 }
                                 value={ selectedKeyIndex === -1 ? '0' : key.row }
                                 onChange={ (e) => {
-                                    const value = parseInt(e.target.value, 10);
-                                    if (value < 0) return;
                                     onUpdateKey(selectedKeyIndex, new Key({
                                         ...key,
-                                        row: value
+                                        row: Math.max(parseInt(e.target.value, 10), 0)
                                     }))
                                 }}
                             />
@@ -49,11 +47,9 @@ class BuilderTabMatrix extends React.Component {
                                 disabled={ selectedKeyIndex === -1 }
                                 value={ selectedKeyIndex === -1 ? '0' : key.column }
                                 onChange={ (e) => {
-                                    const value = parseInt(e.target.value, 10);
-                                    if (value < 0) return;
                                     onUpdateKey(selectedKeyIndex, new Key({
                                         ...key,
-                                        column: value
+                                        column: Math.max(parseInt(e.target.value, 10), 0)
                                     }))
                                 }}
                             />

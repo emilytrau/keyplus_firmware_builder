@@ -26,6 +26,8 @@ function KLELoader(kleData) {
             let rowCount = 0;
             let columnCount = 0;
             let maxColumnCount = 0;
+            let colour = '#cccccc';
+            let legendColour = '#000000';
             // Non persistent values
             let width = 1;
             let height = 1;
@@ -47,6 +49,8 @@ function KLELoader(kleData) {
                         const mod = column;
                         x += mod.x || 0;
                         y += mod.y || 0;
+                        colour = mod.c || colour;
+                        legendColour = mod.t || legendColour;
                         width = mod.w || width;
                         height = mod.h || height;
                         x2 = mod.x2 || x2;
@@ -63,6 +67,8 @@ function KLELoader(kleData) {
                             y,
                             width,
                             height,
+                            colour,
+                            legendColour,
                             x2,
                             y2,
                             w2,
@@ -101,22 +107,63 @@ function KLELoader(kleData) {
                     }
                 }
             }
+
+            const regions = {};
+
+            // Sort keys into their regions
+            layout.forEach((key) => {
+                if (!regions[key.colour]) {
+                    regions[key.colour] = {};
+                }
+
+                if (!regions[key.colour][key.legendColour]) {
+                    regions[key.colour][key.legendColour] = [];
+                }
+
+                regions[key.colour][key.legendColour].push(key);
+            });
             
+            
+            const defaultLayout = layout.filter(x => x.legendColour === '#000000')
+
+            const keyboards = [];
+
+            Object.keys(regions).forEach((regionName, i) => {
+                const region = regions[regionName];
+                Object.keys(region).forEach((groupName, j) => {
+                    const group = region[groupName];
+                    // Keys in this region that aren't in this group
+                    const otherKeys = [].concat(...Object.values(region).filter(x => x !== group));
+                    keyboards.push({
+                        uuid: uuidv4(),
+                        name: i.toString() + ', ' + j.toString(),
+                        layout: defaultLayout.filter(x => otherKeys.indexOf(x) === -1).concat(group),
+                        matrixRows: rowCount,
+                        matrixColumns: maxColumnCount,
+                        layers
+                    })
+                });
+            });
+
+            /*
+            const keyboards = [
+                {
+                    uuid: uuidv4(),
+                    name: 'Untitled keyboard',
+                    layout,
+                    matrixRows: rowCount,
+                    matrixColumns: maxColumnCount,
+                    layers
+                }
+            ]
+            */
+
             collection = new KBCollection({
                 uuid: uuidv4(),
                 name: 'Untitled collection',
                 majorVersion: schemaConfig.SchemaMajorVersion,
                 minorVersion: schemaConfig.SchemaMinorVersion,
-                keyboards: [
-                    {
-                        uuid: uuidv4(),
-                        name: 'Untitled keyboard',
-                        layout,
-                        matrixRows: rowCount,
-                        matrixColumns: maxColumnCount,
-                        layers
-                    }
-                ],
+                keyboards: keyboards,
                 firmwareSettings: {
                     layoutGroups: []
                 }
